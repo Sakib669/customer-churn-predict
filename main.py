@@ -29,18 +29,17 @@ def predict_churn(customer: CustomerData):
 
     input_data = pd.DataFrame([customer.model_dump()])
 
-    input_data["avg_charge"] = (
-        input_data["total_charges"] / input_data["tenure_months"] + 1
-    )
-
     prediction = model.predict(input_data)
-
-    probability = model.predict_proba(input_data)[0][1]
+    prediction_val = int(prediction[0])
+    probability = float(model.predict_proba(input_data)[0][1])
+    will_churn = bool(prediction_val == 1)
 
     return {
-        "will_churn": bool(prediction),
+        "will_churn": will_churn,
         "churn_probability_percentage": round(probability * 100, 2),
-        "message": "High risk of churning!"
-        if prediction == 1
-        else "Customer is likely to stay.",
+        "message": (
+            "High risk of churning!"
+            if will_churn
+            else "Customer is likely to stay."
+        ),
     }
