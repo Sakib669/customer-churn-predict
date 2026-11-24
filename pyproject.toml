@@ -1,20 +1,26 @@
 [project]
 name = "customer-churn-prediction"
 version = "0.1.0"
+description = "Machine Learning service for predicting telecommunications customer churn"
+readme = "README.md"
 requires-python = ">=3.14"
+
+# Core production dependencies for data engineering, modeling, and serving
 dependencies = [
-    "fastapi[standard]>=0.165.0",
-    "joblib>=1.6.0",
-    "jupyter>=1.1.1",
-    "pandas>=3.1.1",
-    "scikit-learn>=1.9.1",
+    "fastapi[standard]>=0.165.0",  # REST API framework with Uvicorn and Pydantic v2
+    "joblib>=1.6.0",              # High-performance pipeline and estimator serialization
+    "jupyter>=1.1.1",             # Interactive EDA and model experimentation environment
+    "pandas>=3.1.1",              # Tabular data manipulation and preprocessing
+    "scikit-learn>=1.9.1",        # Machine Learning transformers and ensemble classifiers
 ]
 
 [dependency-groups]
+# Development, testing, and continuous integration dependencies
 dev = [
-    "pytest>=9.2.0",
+    "pytest>=9.2.0",              # Automated test runner and assertion framework
 ]
 
 [tool.pytest.ini_options]
+# Configure pytest to automatically resolve modules from the repository root
 pythonpath = ["."]
 testpaths = ["tests"]
