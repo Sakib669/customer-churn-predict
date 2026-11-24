@@ -1,0 +1,10 @@
+.git/
+.gitignore
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+tests/
+index.ipynb
+customer_churn_prediction_dataset.csv
+examples/
