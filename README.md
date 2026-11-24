@@ -1,6 +1,11 @@
 # Customer Churn Prediction System
 
-A production-ready Machine Learning system that predicts customer churn in telecommunications using **Scikit-Learn**, **FastAPI**, **Pydantic**, and **UV**.
+A production-ready Machine Learning system that predicts customer churn in telecommunications using **Scikit-Learn**, **FastAPI**, **Pydantic v2**, and **UV**.
+
+[![Python 3.14](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.165+-009688.svg)](https://fastapi.tiangolo.com/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.9+-F7931E.svg)](https://scikit-learn.org/)
+[![UV](https://img.shields.io/badge/managed%20by-uv-DE5FE9.svg)](https://github.com/astral-sh/uv)
 
 ---
 
@@ -33,16 +38,16 @@ A production-ready Machine Learning system that predicts customer churn in telec
 
 ## 📊 Dataset & Pipeline
 
-* **Source File**: `customer_churn_prediction_dataset.csv` (8,080 records)
+* **Source File**: `customer_churn_prediction_dataset.csv` (8,080 customer records)
 * **Target Feature**: `churn` (`Yes`: 40.78%, `No`: 59.22%)
-* **Feature Processing**:
+* **Feature Processing Strategy**:
   * **Numeric Features** (`age`, `tenure_months`, `monthly_charges`, `total_charges`, `senior_citizen`): Imputed with median and scaled using `StandardScaler`.
-  * **Categorical Features** (`gender`, `contract_type`, `internet_service`, `payment_method`, `technical_support`, `paperless_billing`, `streaming_service`, `has_dependents`): Imputed with most frequent values and encoded using `OneHotEncoder(handle_unknown='ignore')`.
+  * **Categorical Features** (`gender`, `contract_type`, `internet_service`, `payment_method`, `technical_support`, `paperless_billing`, `streaming_service`, `has_dependents`): Imputed with modal frequency and encoded using `OneHotEncoder(handle_unknown='ignore')`.
 * **Model Classifier**: `RandomForestClassifier(random_state=42)`
 
 ### Model Performance
 
-| Metric | Retained (0) | Churned (1) | Overall |
+| Metric | Retained (Class 0) | Churned (Class 1) | Overall |
 | :--- | :---: | :---: | :---: |
 | **Precision** | 0.68 | 0.59 | — |
 | **Recall** | 0.76 | 0.50 | — |
@@ -79,9 +84,25 @@ Interactive Swagger documentation is available at: [http://localhost:8000/docs](
 uv run pytest
 ```
 
+### 6. Run Sample Verification Suite
+```bash
+./examples/test_requests.sh
+```
+
 ---
 
 ## 🔌 API Reference
+
+### Service Index
+`GET /`
+```json
+{
+  "service": "Customer Churn Prediction API",
+  "status": "online",
+  "version": "1.0.0",
+  "docs_url": "/docs"
+}
+```
 
 ### Health Check
 `GET /health`
@@ -114,12 +135,27 @@ uv run pytest
 }
 ```
 
-**Response:**
+**Response (HTTP 200 OK):**
 ```json
 {
   "will_churn": true,
   "churn_probability_percentage": 74.0,
   "message": "High risk of churning!"
+}
+```
+
+**Validation Error Response (HTTP 422 Unprocessable Entity):**
+If age is `< 18` or `tenure_months < 0`:
+```json
+{
+  "detail": [
+    {
+      "type": "greater_than_equal",
+      "loc": ["body", "tenure_months"],
+      "msg": "Input should be greater than or equal to 0",
+      "input": -5.0
+    }
+  ]
 }
 ```
 
