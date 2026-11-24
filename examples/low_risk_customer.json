@@ -1,0 +1,15 @@
+{
+  "gender": "Male",
+  "age": 43.0,
+  "tenure_months": 40.2,
+  "contract_type": "Two year",
+  "internet_service": "Fiber optic",
+  "payment_method": "Credit card",
+  "technical_support": "Yes",
+  "paperless_billing": "Yes",
+  "streaming_service": "Yes",
+  "has_dependents": "Yes",
+  "monthly_charges": 60.50,
+  "total_charges": 2420.00,
+  "senior_citizen": 0.0
+}
